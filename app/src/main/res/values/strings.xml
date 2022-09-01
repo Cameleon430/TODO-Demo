@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TODO-Demo</string>
+    <string name="title_home">Home</string>
+    <string name="title_main">Welcome!</string>
 </resources>

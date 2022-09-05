@@ -16,7 +16,7 @@ class HomeActivity : AppCompatActivity(){
         val groupDetailViewButton : View = findViewById(R.id.groupDetailViewButton)
 
         groupDetailViewButton.setOnClickListener {
-            val intent = Intent(this, GroupDetailScreenActivity::class.java)
+            val intent = Intent(this, GroupDetailActivity::class.java)
             startActivity(intent)
         }
 

@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
-class GroupDetailScreenActivity : AppCompatActivity() {
+class GroupDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group_detail_screen)
+        setContentView(R.layout.activity_group_detail)
 
         val taskDetailViewButton : View = findViewById(R.id.taskDetailViewButton)
 
         taskDetailViewButton.setOnClickListener {
-            val intent = Intent(this, TaskDetailScreenActivity::class.java)
+            val intent = Intent(this, TaskDetailActivity::class.java)
             startActivity(intent)
         }
     }

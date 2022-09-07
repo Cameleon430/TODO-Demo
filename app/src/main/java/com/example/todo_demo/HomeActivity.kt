@@ -12,15 +12,17 @@ class HomeActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val fab: View = findViewById(R.id.floating_button)
+        val createGroupButton: View = findViewById(R.id.createGroupButton)
         val groupDetailViewButton : View = findViewById(R.id.groupDetailViewButton)
 
         groupDetailViewButton.setOnClickListener {
+            val groupNumber = 1
             val intent = Intent(this, GroupDetailActivity::class.java)
+            intent.putExtra("GROUP_NUM", groupNumber)
             startActivity(intent)
         }
 
-        fab.setOnClickListener{
+        createGroupButton.setOnClickListener{
             Toast.makeText(applicationContext, "Hey, you clicked it!", Toast.LENGTH_SHORT).show()
         }
     }

@@ -8,19 +8,25 @@ import androidx.appcompat.app.AppCompatActivity
 
 class HomeActivity : AppCompatActivity(){
 
+    companion object{
+        const val EXTRA_NAME = "GROUP_NUM"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val fab: View = findViewById(R.id.floating_button)
+        val createGroupButton: View = findViewById(R.id.createGroupButton)
         val groupDetailViewButton : View = findViewById(R.id.groupDetailViewButton)
 
         groupDetailViewButton.setOnClickListener {
+            val groupNumber = 1
             val intent = Intent(this, GroupDetailActivity::class.java)
+            intent.putExtra( EXTRA_NAME, groupNumber)
             startActivity(intent)
         }
 
-        fab.setOnClickListener{
+        createGroupButton.setOnClickListener{
             Toast.makeText(applicationContext, "Hey, you clicked it!", Toast.LENGTH_SHORT).show()
         }
     }

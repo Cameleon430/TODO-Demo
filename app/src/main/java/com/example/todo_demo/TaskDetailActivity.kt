@@ -1,11 +1,22 @@
 package com.example.todo_demo
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class TaskDetailActivity : AppCompatActivity(){
+
+    companion object{
+        const val DEFAULT_VAL = -1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_detail)
+
+        val taskTitleTextView: TextView = findViewById(R.id.taskTitleTextView)
+        val taskTitleText: String = "Task title " + intent.getIntExtra( GroupDetailActivity.EXTRA_NAME, DEFAULT_VAL).toString()
+
+        taskTitleTextView.text = taskTitleText
     }
 }

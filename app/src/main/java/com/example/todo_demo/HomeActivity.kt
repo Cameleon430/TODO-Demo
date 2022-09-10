@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class HomeActivity : AppCompatActivity(){
 
+    companion object{
+        const val EXTRA_NAME = "GROUP_NUM"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -18,7 +22,7 @@ class HomeActivity : AppCompatActivity(){
         groupDetailViewButton.setOnClickListener {
             val groupNumber = 1
             val intent = Intent(this, GroupDetailActivity::class.java)
-            intent.putExtra("GROUP_NUM", groupNumber)
+            intent.putExtra( EXTRA_NAME, groupNumber)
             startActivity(intent)
         }
 

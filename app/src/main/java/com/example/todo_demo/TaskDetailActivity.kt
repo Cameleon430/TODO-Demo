@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 class TaskDetailActivity : AppCompatActivity(){
 
     companion object{
+        const val EXTRA_NAME = "TASK_NUM"
         const val DEFAULT_VAL = -1
     }
 
@@ -15,7 +16,7 @@ class TaskDetailActivity : AppCompatActivity(){
         setContentView(R.layout.activity_task_detail)
 
         val taskTitleTextView: TextView = findViewById(R.id.taskTitleTextView)
-        val taskTitleText: String = "Task title " + intent.getIntExtra( GroupDetailActivity.EXTRA_NAME, DEFAULT_VAL).toString()
+        val taskTitleText: String = "Task title " + intent.getIntExtra(EXTRA_NAME, DEFAULT_VAL).toString()
 
         taskTitleTextView.text = taskTitleText
     }

@@ -5,16 +5,32 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".TaskDetailActivity"
-    android:background="@color/teal_700">
+    android:background="@color/white">
 
-    <TextView
-        android:id="@+id/taskTitleTextView"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/taskTitleEditText"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:hint="Enter task title"
+        android:saveEnabled="false"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/taskDescriptionEditText"
+        android:layout_width="360dp"
+        android:layout_height="280dp"
+        android:hint="Enter task content"
+        android:saveEnabled="false"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitleEditText"
+        app:layout_constraintVertical_bias="0.097" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

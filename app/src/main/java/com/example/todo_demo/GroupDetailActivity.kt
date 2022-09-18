@@ -26,7 +26,7 @@ class GroupDetailActivity : AppCompatActivity() {
         taskDetailViewButton.setOnClickListener {
             val taskNumber = 1
             val intent = Intent(this, TaskDetailActivity::class.java)
-            intent.putExtra(TaskDetailActivity.EXTRA_NAME, taskNumber)
+            intent.putExtra(TaskDetailActivity.EXTRA_NAME_KEY, taskNumber)
             startActivity(intent)
         }
     }

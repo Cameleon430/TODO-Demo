@@ -9,10 +9,10 @@
 
     <EditText
         android:id="@+id/taskTitleEditText"
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Enter task title"
-        android:saveEnabled="false"
+        android:saveEnabled="true"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,10 +21,10 @@
 
     <EditText
         android:id="@+id/taskDescriptionEditText"
-        android:layout_width="360dp"
-        android:layout_height="280dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:hint="Enter task content"
-        android:saveEnabled="false"
+        android:saveEnabled="true"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,5 +32,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskTitleEditText"
         app:layout_constraintVertical_bias="0.097" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/overcast_sky"
+        android:src="@android:drawable/ic_menu_save"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

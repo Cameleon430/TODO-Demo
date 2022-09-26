@@ -24,17 +24,7 @@
         </activity>
 
         <activity
-            android:name=".HomeActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".GroupDetailActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
-            android:name=".TaskDetailActivity"
+            android:name=".MainActivity"
             android:exported="false">
         </activity>
     </application>

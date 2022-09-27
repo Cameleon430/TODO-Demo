@@ -5,19 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.todo_demo.databinding.FragmentTaskDetailBinding
 
 class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     //region Properties
 
-    private lateinit var taskTitleEditText: EditText
-    private lateinit var taskDescriptionEditText: EditText
-    private lateinit var saveTaskButton: FloatingActionButton
+    private lateinit var binding: FragmentTaskDetailBinding
     private lateinit var sharedPreferences: SharedPreferences
     private var taskID: Int = -1
 
@@ -25,23 +22,14 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     //region Lifecycle
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_task_detail, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+       binding = FragmentTaskDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        taskTitleEditText = view.findViewById(R.id.taskTitleEditText)
-        taskDescriptionEditText = view.findViewById(R.id.taskDescriptionEditText)
-        saveTaskButton = view.findViewById(R.id.saveTaskButton)
-
-        val context = requireContext()
-        sharedPreferences = context.getSharedPreferences(STORAGE_NAME_KEY, AppCompatActivity.MODE_PRIVATE)
-
-        saveTaskButton.setOnClickListener{
-            onSaveData()
-        }
-
+        initializeViews()
+        initializeListeners()
         onSetData()
     }
 
@@ -49,21 +37,32 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     //region Actions
 
+    private fun initializeListeners(){
+        binding.saveTaskButton.setOnClickListener{
+            onSaveData()
+        }
+    }
+
+    private fun initializeViews(){
+        val context = requireContext()
+        sharedPreferences = context.getSharedPreferences(STORAGE_NAME_KEY, AppCompatActivity.MODE_PRIVATE)
+    }
+
     private fun onSetData(){
         val savedID = sharedPreferences.getInt(SAVED_ID_KEY, DEFAULT_VALUE)
         taskID = arguments?.getInt(TASK_ID) ?: -1
 
         if(savedID == taskID) {
-            taskTitleEditText.setText(sharedPreferences.getString(TASK_TITLE_KEY, ""))
-            taskDescriptionEditText.setText(sharedPreferences.getString(TASK_DESCRIPTION_KEY, ""))
+            binding.taskTitleEditText.setText(sharedPreferences.getString(TASK_TITLE_KEY, ""))
+            binding.taskDescriptionEditText.setText(sharedPreferences.getString(TASK_DESCRIPTION_KEY, ""))
         }
     }
 
     private fun onSaveData(){
         if(hasUnsavedData()) {
             val editor = sharedPreferences.edit()
-            editor.putString(TASK_TITLE_KEY, taskTitleEditText.text.toString())
-            editor.putString(TASK_DESCRIPTION_KEY, taskDescriptionEditText.text.toString())
+            editor.putString(TASK_TITLE_KEY, binding.taskTitleEditText.text.toString())
+            editor.putString(TASK_DESCRIPTION_KEY, binding.taskDescriptionEditText.text.toString())
             editor.putInt(SAVED_ID_KEY, taskID)
             editor.apply()
 
@@ -72,8 +71,8 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     }
 
     private fun hasUnsavedData(): Boolean {
-        val taskTitleText: String = taskTitleEditText.text.toString()
-        val taskDescriptionText: String = taskDescriptionEditText.text.toString()
+        val taskTitleText: String = binding.taskTitleEditText.text.toString()
+        val taskDescriptionText: String = binding.taskDescriptionEditText.text.toString()
 
         return taskTitleText.isNotBlank() &&
                 taskDescriptionText.isNotBlank()

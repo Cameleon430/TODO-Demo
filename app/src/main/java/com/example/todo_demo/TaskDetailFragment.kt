@@ -30,7 +30,6 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         taskTitleEditText = view.findViewById(R.id.taskTitleEditText)
         taskDescriptionEditText = view.findViewById(R.id.taskDescriptionEditText)

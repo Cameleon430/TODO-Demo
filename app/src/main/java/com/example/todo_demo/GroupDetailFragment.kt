@@ -26,7 +26,6 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         taskDetailViewButton = view.findViewById(R.id.taskDetailViewButton)
         groupTitleTextView = view.findViewById(R.id.groupTitleTextView)
@@ -34,7 +33,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
         setTitle()
 
         taskDetailViewButton.setOnClickListener {
-            startTaskDetailFragment()
+            navigateTaskDetailFragment()
         }
     }
 
@@ -51,7 +50,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
         groupTitleTextView.text = title
     }
 
-    private fun startTaskDetailFragment() {
+    private fun navigateTaskDetailFragment() {
         val fragment = TaskDetailFragment.newInstance(1)
         parentFragmentManager.commit {
             addToBackStack(null)

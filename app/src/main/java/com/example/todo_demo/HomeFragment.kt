@@ -1,23 +1,28 @@
 package com.example.todo_demo
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment() {
 
-    //region Lifecycles
+    //region Lifecycle
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val createGroupButton: View = view.findViewById(R.id.createGroupButton)
         val groupDetailViewButton : View = view.findViewById(R.id.groupDetailViewButton)
 
         groupDetailViewButton.setOnClickListener {
-            startGroupDetailFragment()
+            navigateGroupDetailFragment()
         }
 
         createGroupButton.setOnClickListener{
@@ -27,9 +32,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     //endregion
 
-    //region Functions
+    //region Actions
 
-    private fun startGroupDetailFragment(){
+    private fun navigateGroupDetailFragment(){
         val fragment = GroupDetailFragment.newInstance(1)
         parentFragmentManager.commit {
             addToBackStack(null)
@@ -38,7 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun createGroup(){
-        Toast.makeText(context, "Hey, you clicked it!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
     }
 
     //endregion

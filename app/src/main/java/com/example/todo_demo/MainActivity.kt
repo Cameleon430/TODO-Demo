@@ -7,7 +7,7 @@ import androidx.fragment.app.commit
 
 class MainActivity : AppCompatActivity(R.layout.activity_main){
 
-    //region Lifecycles
+    //region Lifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

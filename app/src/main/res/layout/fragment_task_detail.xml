@@ -7,11 +7,11 @@
 
     <EditText
         android:id="@+id/taskTitleEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/task_detail_hint_task_title"
         android:saveEnabled="true"
-
+        app:layout_constraintWidth_percent="0.6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,17 +19,15 @@
 
     <EditText
         android:id="@+id/taskDescriptionEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/task_detail_hunt_task_description"
         android:saveEnabled="true"
-
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskTitleEditText"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintTop_toBottomOf="@+id/taskTitleEditText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveTaskButton"
@@ -37,8 +35,8 @@
         android:layout_height="wrap_content"
         app:backgroundTint="@color/overcast_sky"
         android:src="@android:drawable/ic_menu_save"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ContentDescription" />

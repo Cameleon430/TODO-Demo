@@ -8,20 +8,20 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    //region Lifecycles
+    //region Lifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        startActivity()
+        startMainActivity()
     }
 
     //endregion
 
-    //region Functions
+    //region Actions
 
-    private fun startActivity() {
+    private fun startMainActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

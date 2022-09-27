@@ -1,7 +1,9 @@
 package com.example.todo_demo
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.os.bundleOf
@@ -17,7 +19,11 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
 
     //endregion
 
-    //region Lifecycles
+    //region Lifecycle
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_group_detail, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,12 +41,12 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
 
     //endregion
 
-    //region Functions
+    //region Actions
 
     private fun setTitle(){
         val titleTemplate = getString(R.string.group_detail_title_template)
         val groupId = arguments?.getInt(GROUP_ID, DEFAULT_VALUE)
-        val title = "$titleTemplate - $groupId"
+        val title = "$titleTemplate $groupId"
 
         groupTitleTextView.text = title
     }

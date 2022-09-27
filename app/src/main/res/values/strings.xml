@@ -2,6 +2,7 @@
 
     <!--region Main-->
     <string name="app_name">TODO-Demo</string>
+    <string name="button_toast_template">Hey, you clicked it!</string>
     <!--endregion-->
 
     <!--region SplashScreen-->

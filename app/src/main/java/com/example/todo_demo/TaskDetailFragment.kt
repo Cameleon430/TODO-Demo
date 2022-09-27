@@ -39,19 +39,19 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         sharedPreferences = context.getSharedPreferences(STORAGE_NAME_KEY, AppCompatActivity.MODE_PRIVATE)
 
         saveTaskButton.setOnClickListener{
-            saveData()
+            onSaveData()
         }
 
-        setData()
+        onSetData()
     }
 
     //endregion
 
     //region Actions
 
-    private fun setData(){
+    private fun onSetData(){
         val savedID = sharedPreferences.getInt(SAVED_ID_KEY, DEFAULT_VALUE)
-        taskID = arguments?.getInt(TASK_ID)!!
+        taskID = arguments?.getInt(TASK_ID) ?: -1
 
         if(savedID == taskID) {
             taskTitleEditText.setText(sharedPreferences.getString(TASK_TITLE_KEY, ""))
@@ -59,7 +59,7 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         }
     }
 
-    private fun saveData(){
+    private fun onSaveData(){
         if(hasUnsavedData()) {
             val editor = sharedPreferences.edit()
             editor.putString(TASK_TITLE_KEY, taskTitleEditText.text.toString())
@@ -99,4 +99,5 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     }
 
     //endregion
+
 }

@@ -14,14 +14,14 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        startMainActivity()
+        onStartMainActivity()
     }
 
     //endregion
 
     //region Actions
 
-    private fun startMainActivity() {
+    private fun onStartMainActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -38,4 +38,5 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     //endregion
+
 }

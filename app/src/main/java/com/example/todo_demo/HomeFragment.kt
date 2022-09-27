@@ -22,11 +22,11 @@ class HomeFragment : Fragment() {
         val groupDetailViewButton : View = view.findViewById(R.id.groupDetailViewButton)
 
         groupDetailViewButton.setOnClickListener {
-            navigateGroupDetailFragment()
+            onNavigateGroupDetailFragment()
         }
 
         createGroupButton.setOnClickListener{
-            createGroup()
+            onCreateGroup()
         }
     }
 
@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
 
     //region Actions
 
-    private fun navigateGroupDetailFragment(){
+    private fun onNavigateGroupDetailFragment(){
         val fragment = GroupDetailFragment.newInstance(1)
         parentFragmentManager.commit {
             addToBackStack(null)
@@ -42,9 +42,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun createGroup(){
+    private fun onCreateGroup(){
         Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
     }
 
     //endregion
+
 }

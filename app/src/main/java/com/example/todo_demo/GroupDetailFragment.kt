@@ -30,10 +30,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
         taskDetailViewButton = view.findViewById(R.id.taskDetailViewButton)
         groupTitleTextView = view.findViewById(R.id.groupTitleTextView)
 
-        setTitle()
+        onSetTitle()
 
         taskDetailViewButton.setOnClickListener {
-            navigateTaskDetailFragment()
+            onNavigateTaskDetailFragment()
         }
     }
 
@@ -42,7 +42,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
 
     //region Actions
 
-    private fun setTitle(){
+    private fun onSetTitle(){
         val titleTemplate = getString(R.string.group_detail_title_template)
         val groupId = arguments?.getInt(GROUP_ID, DEFAULT_VALUE)
         val title = "$titleTemplate $groupId"
@@ -50,7 +50,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
         groupTitleTextView.text = title
     }
 
-    private fun navigateTaskDetailFragment() {
+    private fun onNavigateTaskDetailFragment() {
         val fragment = TaskDetailFragment.newInstance(1)
         parentFragmentManager.commit {
             addToBackStack(null)

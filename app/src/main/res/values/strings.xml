@@ -1,5 +1,27 @@
 <resources>
+
+    <!--region Main-->
     <string name="app_name">TODO-Demo</string>
-    <string name="title_home">Home</string>
+    <string name="button_toast_template">Hey, you clicked it!</string>
+    <!--endregion-->
+
+    <!--region SplashScreen-->
     <string name="splash_screen_title">ToDo</string>
+    <!--endregion-->
+
+    <!--region Home-->
+    <string name="home_title">Home</string>
+    <string name="home_button_group_detail_view">Group detail view</string>
+    <!--endregion-->
+
+    <!--region Group-->
+    <string name="group_detail_title_template">Group title</string>
+    <string name="group_detail_button_task_detail_view">Task detail view</string>
+    <!--endregion-->
+
+    <!--region Task-->
+    <string name="task_detail_hint_task_title">Enter task title</string>
+    <string name="task_detail_hunt_task_description">Enter task content</string>
+    <!--endregion-->
+
 </resources>

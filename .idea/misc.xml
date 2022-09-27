@@ -10,6 +10,9 @@
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_splash_screen.xml" value="0.1527777777777778" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_task_detail.xml" value="0.22" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_task_detail_screen.xml" value="0.1641337386018237" />
+        <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_group_detail.xml" value="0.1636271529888551" />
+        <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_home.xml" value="0.1641337386018237" />
+        <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_task_detail.xml" value="0.21" />
       </map>
     </option>
   </component>

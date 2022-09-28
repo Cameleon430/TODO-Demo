@@ -1,10 +1,11 @@
-package com.example.todo_demo
+package com.example.todo_demo.presenter.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.example.todo_demo.R
 
 class SplashScreenActivity : AppCompatActivity() {
 

@@ -1,9 +1,11 @@
-package com.example.todo_demo
+package com.example.todo_demo.presenter.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import com.example.todo_demo.R
+import com.example.todo_demo.presenter.home.HomeFragment
 
 class MainActivity : AppCompatActivity(R.layout.activity_main){
 

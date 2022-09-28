@@ -1,4 +1,4 @@
-package com.example.todo_demo
+package com.example.todo_demo.presenter.task
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentTaskDetailBinding
 
 class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
@@ -90,7 +91,7 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         private const val TASK_DESCRIPTION_KEY = "TASK_DESCRIPTION_KEY"
         private const val TASK_TITLE_KEY = "TASK_TITLE_KEY"
 
-        fun newInstance(taskId: Int): TaskDetailFragment{
+        fun newInstance(taskId: Int): TaskDetailFragment {
             return TaskDetailFragment().apply{
                 arguments = bundleOf(TASK_ID to taskId)
             }

@@ -7,32 +7,42 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.todo_demo.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
+    //region Properties
+    private lateinit var binding: FragmentHomeBinding
+    //endregion
+
     //region Lifecycle
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val createGroupButton: View = view.findViewById(R.id.createGroupButton)
-        val groupDetailViewButton : View = view.findViewById(R.id.groupDetailViewButton)
+        initializeListeners()
 
-        groupDetailViewButton.setOnClickListener {
-            onNavigateGroupDetailFragment()
-        }
-
-        createGroupButton.setOnClickListener{
-            onCreateGroup()
-        }
     }
 
     //endregion
 
     //region Actions
+
+    private fun initializeListeners(){
+        with(binding){
+            groupDetailViewButton.setOnClickListener {
+                onNavigateGroupDetailFragment()
+            }
+
+            createGroupButton.setOnClickListener{
+                onCreateGroup()
+            }
+        }
+    }
 
     private fun onNavigateGroupDetailFragment(){
         val fragment = GroupDetailFragment.newInstance(1)

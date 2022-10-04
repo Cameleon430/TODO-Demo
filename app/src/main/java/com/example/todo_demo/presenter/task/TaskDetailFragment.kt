@@ -1,23 +1,24 @@
 package com.example.todo_demo.presenter.task
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentTaskDetailBinding
+import com.example.todo_demo.presenter.task.TaskDetailViewModel.ActionState
 
 class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     //region Properties
 
     private lateinit var binding: FragmentTaskDetailBinding
-    private lateinit var sharedPreferences: SharedPreferences
-    private var taskID: Int = -1
+    private val viewModel by viewModels<TaskDetailViewModel>()
 
     //endregion
 
@@ -31,52 +32,77 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initializeViews()
         initializeListeners()
-        onSetData()
+    }
+
+    //endregion
+
+    //region Initialization
+
+    private fun initializeListeners(){
+        with(binding){
+
+            saveTaskButton.setOnClickListener{
+                viewModel.saveTask()
+            }
+
+            taskTitleEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.onTitleChanged(text.toString())
+            }
+
+            taskDescriptionEditText.doOnTextChanged { text, _, _, _ ->
+                viewModel.onDescriptionChanged(text.toString())
+            }
+
+        }
+    }
+
+    private fun initializeViews(){
+        val taskID = arguments?.getInt(TASK_ID) ?: throw IllegalStateException("Missing task id")
+        viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
+        viewModel.taskTitle.observe(viewLifecycleOwner, this::onTaskTitleChanged)
+        viewModel.taskDescription.observe(viewLifecycleOwner, this::onTaskDescriptionChanged)
+        viewModel.onUpdateViewState(taskID)
     }
 
     //endregion
 
     //region Actions
 
-    private fun initializeListeners(){
-        binding.saveTaskButton.setOnClickListener{
-            onSaveData()
+    private fun onTaskDescriptionChanged(taskDescription: String) {
+        with(binding){
+            if( taskDescriptionEditText.text.toString() != taskDescription){
+                taskDescriptionEditText.setText(taskDescription)
+            }
         }
     }
 
-    private fun initializeViews(){
-        val context = requireContext()
-        sharedPreferences = context.getSharedPreferences(STORAGE_NAME_KEY, AppCompatActivity.MODE_PRIVATE)
-    }
-
-    private fun onSetData(){
-        val savedID = sharedPreferences.getInt(SAVED_ID_KEY, DEFAULT_VALUE)
-        taskID = arguments?.getInt(TASK_ID) ?: -1
-
-        if(savedID == taskID) {
-            binding.taskTitleEditText.setText(sharedPreferences.getString(TASK_TITLE_KEY, ""))
-            binding.taskDescriptionEditText.setText(sharedPreferences.getString(TASK_DESCRIPTION_KEY, ""))
+    private fun onTaskTitleChanged(taskTitle: String) {
+        with(binding){
+            if( taskTitleEditText.text.toString() != taskTitle){
+                taskTitleEditText.setText(taskTitle)
+            }
         }
     }
 
-    private fun onSaveData(){
-        if(hasUnsavedData()) {
-            val editor = sharedPreferences.edit()
-            editor.putString(TASK_TITLE_KEY, binding.taskTitleEditText.text.toString())
-            editor.putString(TASK_DESCRIPTION_KEY, binding.taskDescriptionEditText.text.toString())
-            editor.putInt(SAVED_ID_KEY, taskID)
-            editor.apply()
-
-            requireActivity().onBackPressed()
+    private fun onActionStateChanged(state: ActionState) {
+        when(state){
+            ActionState.None -> {
+                //This state ignored
+            }
+            ActionState.ShowMessage -> {
+                showMessage()
+            }
+            is ActionState.OnDescriptionChanged -> {
+                onTaskDescriptionChanged(state.taskDescription)
+            }
+            is ActionState.OnTitleChanged -> {
+                onTaskTitleChanged(state.taskTitle)
+            }
         }
     }
 
-    private fun hasUnsavedData(): Boolean {
-        val taskTitleText: String = binding.taskTitleEditText.text.toString()
-        val taskDescriptionText: String = binding.taskDescriptionEditText.text.toString()
-
-        return taskTitleText.isNotBlank() &&
-                taskDescriptionText.isNotBlank()
+    private fun showMessage() {
+        Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
     }
 
     //endregion
@@ -85,11 +111,6 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     companion object{
         private const val TASK_ID = "TASK_ID"
-        private const val SAVED_ID_KEY = "TASK_ID_KEY"
-        private const val DEFAULT_VALUE = -1
-        private const val STORAGE_NAME_KEY = "MY_TASKS"
-        private const val TASK_DESCRIPTION_KEY = "TASK_DESCRIPTION_KEY"
-        private const val TASK_TITLE_KEY = "TASK_TITLE_KEY"
 
         fun newInstance(taskId: Int): TaskDetailFragment {
             return TaskDetailFragment().apply{

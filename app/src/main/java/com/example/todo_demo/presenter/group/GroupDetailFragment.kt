@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentGroupDetailBinding
+import com.example.todo_demo.presenter.group.GroupDetailViewModel.ActionState
 import com.example.todo_demo.presenter.task.TaskDetailFragment
 
 class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
@@ -16,6 +18,7 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
     //region Properties
 
     private lateinit var binding: FragmentGroupDetailBinding
+    private val viewModel by viewModels<GroupDetailViewModel>()
 
     //endregion
 
@@ -27,34 +30,56 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        onSetTitle()
+        initializeViewModel()
         initializeListeners()
     }
 
 
     //endregion
 
-    //region Actions
+    //region Initialization
+
+    private fun initializeViewModel(){
+        val groupID = arguments?.getInt(GROUP_ID) ?: throw IllegalStateException("Missing group id")
+        viewModel.onUpdateViewState(groupID)
+
+        viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
+        viewModel.groupID.observe(viewLifecycleOwner, this::onSetTitle)
+    }
 
     private fun initializeListeners(){
         binding.taskDetailViewButton.setOnClickListener {
-            onNavigateTaskDetailFragment()
+            viewModel.onNavigateTaskDetailFragment()
         }
     }
 
-    private fun onSetTitle(){
+    //endregion
+
+    //region Actions
+
+    private fun onSetTitle(groupID: Int){
         val titleTemplate = getString(R.string.group_detail_title_template)
-        val groupId = arguments?.getInt(GROUP_ID, DEFAULT_VALUE)
-        val title = "$titleTemplate $groupId"
+        val title = "$titleTemplate $groupID"
 
         binding.groupTitleTextView.text = title
     }
 
-    private fun onNavigateTaskDetailFragment() {
-        val fragment = TaskDetailFragment.newInstance(1)
+    private fun onNavigateTaskDetailFragment(taskID: Int) {
+        val fragment = TaskDetailFragment.newInstance(taskID)
         parentFragmentManager.commit {
             addToBackStack(null)
             replace(R.id.fragment_container_view, fragment)
+        }
+    }
+
+    private fun onActionStateChanged(state: ActionState){
+        when(state){
+            is ActionState.NavigateTaskDataFragment -> {
+                onNavigateTaskDetailFragment(state.taskID)
+            }
+            ActionState.None -> {
+                //This case ignored
+            }
         }
     }
 
@@ -63,7 +88,6 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
     //region Nested
 
     companion object{
-        private const val DEFAULT_VALUE = -1
         private const val GROUP_ID = "GROUP_ID"
 
         fun newInstance(groupId: Int): GroupDetailFragment {

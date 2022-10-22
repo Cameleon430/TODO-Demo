@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/TODODemo/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.1" />
+        <entry key="..\:/TODODemo/app/src/main/res/drawable/icon_background.xml" value="0.1" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_group_detail.xml" value="0.1641337386018237" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_group_detail_screen.xml" value="0.1636271529888551" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/activity_home.xml" value="0.2" />
@@ -13,6 +15,8 @@
         <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_group_detail.xml" value="0.1636271529888551" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_home.xml" value="0.1641337386018237" />
         <entry key="..\:/TODODemo/app/src/main/res/layout/fragment_task_detail.xml" value="0.21" />
+        <entry key="..\:/TODODemo/app/src/main/res/layout/item_group.xml" value="0.33" />
+        <entry key="..\:/TODODemo/app/src/main/res/layout/item_task.xml" value="0.22" />
       </map>
     </option>
   </component>

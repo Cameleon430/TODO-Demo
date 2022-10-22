@@ -10,16 +10,18 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentHomeBinding
+import com.example.todo_demo.presenter.base.GroupViewState
 import com.example.todo_demo.presenter.group.GroupDetailFragment
-import com.example.todo_demo.presenter.home.HomeViewModel.*
+import com.example.todo_demo.presenter.home.HomeViewModel.ActionState
 import com.example.todo_demo.presenter.home.HomeViewModel.ActionState.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
 
     //region Properties
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel by viewModels<HomeViewModel>()
+    private val adapter = GroupViewItemAdapter(this)
 
     //endregion
 
@@ -34,6 +36,7 @@ class HomeFragment : Fragment() {
 
         initializeViewModel()
         initializeListeners()
+        initializeRecyclerView()
 
     }
 
@@ -41,19 +44,22 @@ class HomeFragment : Fragment() {
 
     //region Initialization
 
+    private fun initializeRecyclerView() {
+        with(binding){
+            groupRecyclerView.adapter = adapter
+        }
+    }
+
     private fun initializeViewModel(){
         viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
-
+        viewModel.viewItems.observe(viewLifecycleOwner, this::onViewItemsChanged)
+        viewModel.onUpdateViewState()
     }
 
     private fun initializeListeners(){
         with(binding){
-            groupDetailViewButton.setOnClickListener {
-                viewModel.onGroupDetailView()
-            }
-
             createGroupButton.setOnClickListener{
-                viewModel.onCreateGroup()
+                viewModel.onCreateGroups()
             }
         }
     }
@@ -61,6 +67,11 @@ class HomeFragment : Fragment() {
     //endregion
 
     //region Actions
+
+    private fun onViewItemsChanged(groups: List<GroupViewState>) {
+        adapter.updateItemsView(groups)
+    }
+
 
     private fun onNavigateGroupDetailFragment( groupID: Int){
         val fragment = GroupDetailFragment.newInstance(groupID)
@@ -82,6 +93,10 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onClick(group: GroupViewState) {
+        viewModel.onGroupDetailView(group)
     }
 
     //endregion

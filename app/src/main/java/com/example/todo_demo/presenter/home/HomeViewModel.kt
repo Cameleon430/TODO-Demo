@@ -1,28 +1,49 @@
 package com.example.todo_demo.presenter.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.todo_demo.domain.Group
+import com.example.todo_demo.presenter.base.GroupViewState
+import com.example.todo_demo.presenter.base.SingleLiveEvent
 
 class HomeViewModel : ViewModel() {
 
     //region Properties
 
-    private val actionStateMutable = MutableLiveData<ActionState>(ActionState.None)
+    private val actionStateMutable = SingleLiveEvent<ActionState>(ActionState.None)
     val actionState: LiveData<ActionState> = actionStateMutable
+
+    private val viewItemsMutable = SingleLiveEvent<List<GroupViewState>>(emptyList())
+    val viewItems: LiveData<List<GroupViewState>> = viewItemsMutable
 
     //endregion
 
     //region Actions
 
-    fun onCreateGroup(){
-        actionStateMutable.value = ActionState.ShowMessage
-        actionStateMutable.value = ActionState.None
+    fun onUpdateViewState(){
+        val viewItems = createGroups().map{
+            it.toViewState()
+        }
+        viewItemsMutable.value = viewItems
     }
 
-    fun onGroupDetailView(){
-        actionStateMutable.value = ActionState.GroupDetailView(1)
-        actionStateMutable.value = ActionState.None
+    private fun createGroups(count: Int = 25): List<Group>{
+        return (0..count).map { index ->
+            Group(id = index, name = "Group $index")
+        }.toList()
+    }
+
+    fun onCreateGroups(){
+        actionStateMutable.value = ActionState.ShowMessage
+    }
+
+    fun onGroupDetailView(group: GroupViewState){
+
+        val viewItem = viewItems.value?.firstOrNull{
+            it.id == group.id
+        }?: throw IllegalStateException()
+
+        actionStateMutable.value = ActionState.GroupDetailView(viewItem.id)
     }
 
     //endregion
@@ -33,6 +54,13 @@ class HomeViewModel : ViewModel() {
         object None: ActionState()
         object ShowMessage: ActionState()
         data class GroupDetailView(val groupID: Int): ActionState()
+    }
+
+    private fun Group.toViewState(): GroupViewState{
+        return GroupViewState(
+            id = id,
+            name = name
+        )
     }
 
     //endregion

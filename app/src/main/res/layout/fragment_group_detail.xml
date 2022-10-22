@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -10,19 +11,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:layout_marginTop="128dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Group title 1" />
+        app:layout_constraintBottom_toTopOf="@id/taskRecyclerView"
+        tools:text="Group title 1"/>
 
-    <Button
-        android:id="@+id/taskDetailViewButton"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createTaskButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/group_detail_button_task_detail_view"
-        android:layout_marginBottom="64dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:src="@android:drawable/ic_input_add"
+        android:backgroundTint="@color/overcast_sky"
+        app:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/taskRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_group"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/groupTitleTextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

@@ -4,21 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentGroupDetailBinding
+import com.example.todo_demo.presenter.base.TaskViewState
 import com.example.todo_demo.presenter.group.GroupDetailViewModel.ActionState
 import com.example.todo_demo.presenter.task.TaskDetailFragment
 
-class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
+class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener {
 
     //region Properties
 
     private lateinit var binding: FragmentGroupDetailBinding
     private val viewModel by viewModels<GroupDetailViewModel>()
+    private val adapter = TaskViewItemAdapter(this)
 
     //endregion
 
@@ -32,12 +35,18 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initializeViewModel()
         initializeListeners()
+        initializeRecyclerView()
     }
-
 
     //endregion
 
     //region Initialization
+
+    private fun initializeRecyclerView() {
+        with(binding){
+            taskRecyclerView.adapter = adapter
+        }
+    }
 
     private fun initializeViewModel(){
         val groupID = arguments?.getInt(GROUP_ID) ?: throw IllegalStateException("Missing group id")
@@ -45,17 +54,24 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
 
         viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
         viewModel.groupID.observe(viewLifecycleOwner, this::onSetTitle)
+        viewModel.viewItems.observe(viewLifecycleOwner, this::onViewItemsChanged)
     }
 
     private fun initializeListeners(){
-        binding.taskDetailViewButton.setOnClickListener {
-            viewModel.onNavigateTaskDetailFragment()
+        with(binding){
+            createTaskButton.setOnClickListener{
+                viewModel.onCreateTask()
+            }
         }
     }
 
     //endregion
 
     //region Actions
+
+    private fun onViewItemsChanged(tasks: List<TaskViewState>) {
+        adapter.updateItemsView(tasks)
+    }
 
     private fun onSetTitle(groupID: Int){
         val titleTemplate = getString(R.string.group_detail_title_template)
@@ -80,6 +96,9 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
             ActionState.None -> {
                 //This case ignored
             }
+            ActionState.ShowMessage -> {
+                Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -95,6 +114,10 @@ class GroupDetailFragment : Fragment(R.layout.fragment_group_detail){
                 arguments = bundleOf(GROUP_ID to groupId)
             }
         }
+    }
+
+    override fun onClick(task: TaskViewState) {
+        viewModel.onNavigateTaskDetailFragment(task)
     }
 
     //endregion

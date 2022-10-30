@@ -12,6 +12,9 @@
     <!--region Home-->
     <string name="home_title">Home</string>
     <string name="home_button_group_detail_view">Group detail view</string>
+    <string name="create_group_title_text">Create new group</string>
+    <string name="create_group_text_edit_hint">Enter group name</string>
+    <string name="create_group_button_text">Create group</string>
     <!--endregion-->
 
     <!--region Group-->

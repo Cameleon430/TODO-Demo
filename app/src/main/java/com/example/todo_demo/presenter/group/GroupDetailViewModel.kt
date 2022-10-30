@@ -1,7 +1,9 @@
 package com.example.todo_demo.presenter.group
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.todo_demo.di.ServiceLocator
 import com.example.todo_demo.domain.Task
 import com.example.todo_demo.presenter.base.SingleLiveEvent
 import com.example.todo_demo.presenter.base.TaskViewState
@@ -10,35 +12,29 @@ class GroupDetailViewModel : ViewModel() {
 
     //region Properties
 
-    private val groupIDMutable = SingleLiveEvent(-1)
-    val groupID: LiveData<Int> = groupIDMutable
+    private val groupRepository = ServiceLocator.provideGroupRepository()
+    private val taskRepository = ServiceLocator.provideTaskRepository()
+
+    private val groupNameMutable = MutableLiveData("")
+    val groupName: LiveData<String> = groupNameMutable
+
+    private val viewItemsMutable = MutableLiveData<List<TaskViewState>>(emptyList())
+    val viewItems: LiveData<List<TaskViewState>> = viewItemsMutable
 
     private val actionStateMutable = SingleLiveEvent<ActionState>(ActionState.None)
     val actionState: LiveData<ActionState> = actionStateMutable
 
-    private val viewItemsMutable = SingleLiveEvent<List<TaskViewState>>(emptyList())
-    val viewItems: LiveData<List<TaskViewState>> = viewItemsMutable
+    private var groupID: Int = 0
 
     //endregion
 
     //region Actions
 
     fun onUpdateViewState(groupID: Int){
-        val viewItems = createTasks().map{
-            it.toViewState()
-        }
-        viewItemsMutable.value = viewItems
-        groupIDMutable.value = groupID
-    }
-
-    private fun createTasks(count: Int = 25): List<Task>{
-        return (0..count).map { index ->
-            Task(id = index, name = "Task $index")
-        }.toList()
-    }
-
-    fun onCreateTask(){
-        actionStateMutable.value = ActionState.ShowMessage
+        val group = groupRepository.get(groupID) ?: throw IllegalStateException()
+        groupNameMutable.value = group.name
+        this.groupID = groupID
+        invalidateViewItem()
     }
 
     fun onNavigateTaskDetailFragment(task: TaskViewState) {
@@ -46,7 +42,26 @@ class GroupDetailViewModel : ViewModel() {
             it.id == task.id
         }?: throw IllegalStateException()
 
-        actionStateMutable.value = ActionState.NavigateTaskDataFragment(viewItem.id)
+        actionStateMutable.value = ActionState.NavigateTaskDataFragment(groupID, viewItem.id)
+    }
+
+    fun onBackButtonPressed() {
+        actionStateMutable.value = ActionState.Back
+    }
+
+    fun onCreateTask() {
+        val task = Task()
+
+        val taskID = taskRepository.add(groupID, task)
+        actionStateMutable.value = ActionState.NavigateTaskDataFragment(groupID, taskID)
+    }
+
+    private fun invalidateViewItem(){
+        val viewItems = taskRepository.getAll(groupID).map{
+            it.toViewState()
+        }
+
+        viewItemsMutable.value = viewItems
     }
 
     //endregion
@@ -55,8 +70,9 @@ class GroupDetailViewModel : ViewModel() {
 
     sealed class ActionState{
         object None: ActionState()
+        object Back: ActionState()
         object ShowMessage: GroupDetailViewModel.ActionState()
-        data class NavigateTaskDataFragment(val taskID: Int): ActionState()
+        data class NavigateTaskDataFragment(val groupID: Int, val taskID: Int): ActionState()
     }
 
     private fun Task.toViewState(): TaskViewState {

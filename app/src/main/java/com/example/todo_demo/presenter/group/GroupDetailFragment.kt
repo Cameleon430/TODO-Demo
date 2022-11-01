@@ -53,12 +53,16 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
         viewModel.onUpdateViewState(groupID)
 
         viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
-        viewModel.groupID.observe(viewLifecycleOwner, this::onSetTitle)
+        viewModel.groupName.observe(viewLifecycleOwner, this::onSetTitle)
         viewModel.viewItems.observe(viewLifecycleOwner, this::onViewItemsChanged)
     }
 
     private fun initializeListeners(){
         with(binding){
+            backButton.setOnClickListener {
+                viewModel.onBackButtonPressed()
+            }
+
             createTaskButton.setOnClickListener{
                 viewModel.onCreateTask()
             }
@@ -73,15 +77,12 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
         adapter.updateItemsView(tasks)
     }
 
-    private fun onSetTitle(groupID: Int){
-        val titleTemplate = getString(R.string.group_detail_title_template)
-        val title = "$titleTemplate $groupID"
-
-        binding.groupTitleTextView.text = title
+    private fun onSetTitle(groupName: String){
+        binding.groupTitleTextView.text = groupName
     }
 
-    private fun onNavigateTaskDetailFragment(taskID: Int) {
-        val fragment = TaskDetailFragment.newInstance(taskID)
+    private fun onNavigateTaskDetailFragment(groupId: Int, taskID: Int) {
+        val fragment = TaskDetailFragment.newInstance(groupID = groupId, taskID = taskID)
         parentFragmentManager.commit {
             addToBackStack(null)
             replace(R.id.fragment_container_view, fragment)
@@ -90,8 +91,8 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
 
     private fun onActionStateChanged(state: ActionState){
         when(state){
-            is ActionState.NavigateTaskDataFragment -> {
-                onNavigateTaskDetailFragment(state.taskID)
+            is ActionState.TaskDetailView -> {
+                onNavigateTaskDetailFragment(state.groupID, state.taskID)
             }
             ActionState.None -> {
                 //This case ignored
@@ -99,7 +100,14 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
             ActionState.ShowMessage -> {
                 Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
             }
+            ActionState.Back -> {
+                parentFragmentManager.popBackStack()
+            }
         }
+    }
+
+    override fun onClick(task: TaskViewState) {
+        viewModel.onNavigateTaskDetailFragment(task)
     }
 
     //endregion
@@ -115,11 +123,5 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
             }
         }
     }
-
-    override fun onClick(task: TaskViewState) {
-        viewModel.onNavigateTaskDetailFragment(task)
-    }
-
     //endregion
-
 }

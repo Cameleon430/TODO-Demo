@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentHomeBinding
@@ -26,6 +27,15 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
     //endregion
 
     //region Lifecycle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(
+            FragmentDialog.CreateGroup.key,
+            this::onDialogResult
+        )
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -59,7 +69,7 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
     private fun initializeListeners(){
         with(binding){
             createGroupButton.setOnClickListener{
-                viewModel.onCreateGroups()
+                viewModel.onCreateGroupDialog()
             }
         }
     }
@@ -68,10 +78,18 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
 
     //region Actions
 
+    private fun onDialogResult(requestKey:String, bundle: Bundle) {
+        when(requestKey) {
+            FragmentDialog.CreateGroup.key -> {
+                val groupName = bundle.getString(FragmentDialog.CreateGroup.key) ?: return
+                viewModel.onCreateGroup(groupName)
+            }
+        }
+    }
+
     private fun onViewItemsChanged(groups: List<GroupViewState>) {
         adapter.updateItemsView(groups)
     }
-
 
     private fun onNavigateGroupDetailFragment( groupID: Int){
         val fragment = GroupDetailFragment.newInstance(groupID)
@@ -89,14 +107,32 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
             None -> {
                 //This case ignored
             }
+            ShowCreateGroupDialog -> {
+                CreateGroupDialogFragment.show(
+                    fragmentManager = parentFragmentManager,
+                    requestKey = FragmentDialog.CreateGroup.key
+                )
+            }
             ShowMessage -> {
-                Toast.makeText(context, getString(R.string.button_toast_template), Toast.LENGTH_SHORT).show()
+                showMessage("Message")
             }
         }
     }
 
+    private fun showMessage(message: String){
+        Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onClick(group: GroupViewState) {
         viewModel.onGroupDetailView(group)
+    }
+
+    //endregion
+
+    //region Nested
+
+    sealed class FragmentDialog(val key: String){
+        object CreateGroup: FragmentDialog("CreateGroup")
     }
 
     //endregion

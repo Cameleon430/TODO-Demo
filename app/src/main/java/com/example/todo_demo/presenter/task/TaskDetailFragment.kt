@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.todo_demo.R
 import com.example.todo_demo.databinding.FragmentTaskDetailBinding
+import com.example.todo_demo.presenter.base.BaseFragment
 import com.example.todo_demo.presenter.task.TaskDetailViewModel.ActionState
 
-class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
+class TaskDetailFragment : BaseFragment() {
 
     //region Properties
 
@@ -34,6 +34,10 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         initializeListeners()
     }
 
+    override fun onBackPressed() {
+        viewModel.saveTask()
+    }
+
     //endregion
 
     //region Initialization
@@ -41,8 +45,16 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     private fun initializeListeners(){
         with(binding){
 
+            backButton.setOnClickListener{
+                viewModel.saveTask()
+            }
+
             saveTaskButton.setOnClickListener{
                 viewModel.saveTask()
+            }
+
+            deleteButton.setOnClickListener{
+                viewModel.deleteTask()
             }
 
             taskTitleEditText.doOnTextChanged { text, _, _, _ ->
@@ -57,11 +69,14 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     }
 
     private fun initializeViews(){
+        val groupID = arguments?.getInt(GROUP_ID) ?: throw IllegalStateException("Missing group id")
         val taskID = arguments?.getInt(TASK_ID) ?: throw IllegalStateException("Missing task id")
+
         viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
         viewModel.taskTitle.observe(viewLifecycleOwner, this::onTaskTitleChanged)
         viewModel.taskDescription.observe(viewLifecycleOwner, this::onTaskDescriptionChanged)
-        viewModel.onUpdateViewState(taskID)
+
+        viewModel.onUpdateViewState(groupID, taskID)
     }
 
     //endregion
@@ -98,6 +113,9 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
             is ActionState.OnTitleChanged -> {
                 onTaskTitleChanged(state.taskTitle)
             }
+            ActionState.Back -> {
+                parentFragmentManager.popBackStack()
+            }
         }
     }
 
@@ -111,10 +129,14 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     companion object{
         private const val TASK_ID = "TASK_ID"
+        private const val GROUP_ID = "GROUP_ID"
 
-        fun newInstance(taskId: Int): TaskDetailFragment {
+        fun newInstance(groupID: Int, taskID: Int): TaskDetailFragment {
             return TaskDetailFragment().apply{
-                arguments = bundleOf(TASK_ID to taskId)
+                arguments = bundleOf(
+                    TASK_ID to taskID,
+                    GROUP_ID to groupID
+                )
             }
         }
     }

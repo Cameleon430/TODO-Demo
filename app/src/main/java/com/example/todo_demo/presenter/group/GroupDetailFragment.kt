@@ -91,7 +91,7 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
 
     private fun onActionStateChanged(state: ActionState){
         when(state){
-            is ActionState.NavigateTaskDataFragment -> {
+            is ActionState.TaskDetailView -> {
                 onNavigateTaskDetailFragment(state.groupID, state.taskID)
             }
             ActionState.None -> {
@@ -106,11 +106,9 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
         }
     }
 
-
     override fun onClick(task: TaskViewState) {
         viewModel.onNavigateTaskDetailFragment(task)
     }
-
 
     //endregion
 
@@ -126,5 +124,4 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
         }
     }
     //endregion
-
 }

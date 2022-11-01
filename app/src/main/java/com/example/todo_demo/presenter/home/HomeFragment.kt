@@ -82,7 +82,6 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
         when(requestKey) {
             FragmentDialog.CreateGroup.key -> {
                 val groupName = bundle.getString(FragmentDialog.CreateGroup.key) ?: return
-                Toast.makeText(context,"Group created", Toast.LENGTH_SHORT).show()
                 viewModel.onCreateGroup(groupName)
             }
         }
@@ -114,7 +113,14 @@ class HomeFragment : Fragment(), GroupViewItemAdapter.OnItemSelectListener {
                     requestKey = FragmentDialog.CreateGroup.key
                 )
             }
+            ShowMessage -> {
+                showMessage("Message")
+            }
         }
+    }
+
+    private fun showMessage(message: String){
+        Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onClick(group: GroupViewState) {

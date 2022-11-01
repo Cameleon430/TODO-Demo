@@ -42,7 +42,7 @@ class GroupDetailViewModel : ViewModel() {
             it.id == task.id
         }?: throw IllegalStateException()
 
-        actionStateMutable.value = ActionState.NavigateTaskDataFragment(groupID, viewItem.id)
+        actionStateMutable.value = ActionState.TaskDetailView(groupID, viewItem.id)
     }
 
     fun onBackButtonPressed() {
@@ -53,7 +53,7 @@ class GroupDetailViewModel : ViewModel() {
         val task = Task()
 
         val taskID = taskRepository.add(groupID, task)
-        actionStateMutable.value = ActionState.NavigateTaskDataFragment(groupID, taskID)
+        actionStateMutable.value = ActionState.TaskDetailView(groupID, taskID)
     }
 
     private fun invalidateViewItem(){
@@ -72,7 +72,7 @@ class GroupDetailViewModel : ViewModel() {
         object None: ActionState()
         object Back: ActionState()
         object ShowMessage: GroupDetailViewModel.ActionState()
-        data class NavigateTaskDataFragment(val groupID: Int, val taskID: Int): ActionState()
+        data class TaskDetailView(val groupID: Int, val taskID: Int): ActionState()
     }
 
     private fun Task.toViewState(): TaskViewState {

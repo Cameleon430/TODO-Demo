@@ -7,14 +7,14 @@ import com.example.todo_demo.domain.TaskRepository
 
 object ServiceLocator {
 
-    private val GroupRepository = InMemoryGroupRepository()
-    private val TaskRepository = InMemoryTaskRepository()
+    private val groupRepository = InMemoryGroupRepository()
+    private val taskRepository = InMemoryTaskRepository()
 
     fun provideGroupRepository(): GroupRepository{
-        return GroupRepository
+        return groupRepository
     }
 
     fun provideTaskRepository(): TaskRepository{
-        return TaskRepository
+        return taskRepository
     }
 }

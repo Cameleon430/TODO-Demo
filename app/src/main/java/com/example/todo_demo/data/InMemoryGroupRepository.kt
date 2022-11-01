@@ -24,21 +24,20 @@ class InMemoryGroupRepository : GroupRepository {
         val oldGroup = get(group.id) ?: return
         val index = groups.indexOf(oldGroup)
 
-        if(index < 0)
-            return
-        else {
+        if(index >= 0){
             groups.removeAt(index)
             groups.add(index, group)
         }
+        else return
     }
 
     override fun delete(group: Group) {
         val oldGroup = get(group.id) ?: return
         val index = groups.indexOf(oldGroup)
 
-        if(index < 0)
-            return
-        else
+        if(index >= 0)
             groups.removeAt(index)
+        else
+            return
     }
 }

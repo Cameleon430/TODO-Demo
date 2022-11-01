@@ -63,6 +63,7 @@ class HomeViewModel : ViewModel() {
     sealed class ActionState{
         object None: ActionState()
         object ShowCreateGroupDialog: ActionState()
+        object ShowMessage: ActionState()
         data class GroupDetailView(val groupID: Int): ActionState()
     }
 

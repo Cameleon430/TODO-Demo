@@ -81,8 +81,8 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
         binding.groupTitleTextView.text = groupName
     }
 
-    private fun onNavigateTaskDetailFragment(groupId: Int, taskID: Int) {
-        val fragment = TaskDetailFragment.newInstance(groupID = groupId, taskID = taskID)
+    private fun onNavigateTaskDetailFragment(taskID: Int) {
+        val fragment = TaskDetailFragment.newInstance(taskID = taskID)
         parentFragmentManager.commit {
             addToBackStack(null)
             replace(R.id.fragment_container_view, fragment)
@@ -92,7 +92,7 @@ class GroupDetailFragment : Fragment(), TaskViewItemAdapter.OnItemSelectListener
     private fun onActionStateChanged(state: ActionState){
         when(state){
             is ActionState.TaskDetailView -> {
-                onNavigateTaskDetailFragment(state.groupID, state.taskID)
+                onNavigateTaskDetailFragment(state.taskID)
             }
             ActionState.None -> {
                 //This case ignored

@@ -3,16 +3,17 @@ package com.example.todo_demo.presenter.task
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.todo_demo.di.ServiceLocator
 import com.example.todo_demo.domain.Task
 import com.example.todo_demo.presenter.base.SingleLiveEvent
+import kotlinx.coroutines.launch
 
 class TaskDetailViewModel : ViewModel() {
 
     //region Properties
 
     private lateinit var task: Task
-    private var groupID: Int = 0
 
     private val taskRepository = ServiceLocator.provideTaskRepository()
 
@@ -37,29 +38,34 @@ class TaskDetailViewModel : ViewModel() {
         taskDescriptionMutable.value = taskDescription
     }
 
-    fun onUpdateViewState(groupID: Int, taskID: Int) {
-        task = taskRepository.get(groupID, taskID) ?: throw IllegalStateException()
+    fun onUpdateViewState(taskID: Int) {
+        viewModelScope.launch {
+            task = taskRepository.get(taskID) ?: throw IllegalStateException()
 
-        taskTitleMutable.value = task.name
-        taskDescriptionMutable.value = task.description
-        this.groupID = groupID
+            taskTitleMutable.value = task.name
+            taskDescriptionMutable.value = task.description
+        }
     }
 
     fun saveTask() {
-        val title = taskTitleMutable.value ?: ""
-        val description = taskDescriptionMutable.value ?: ""
-        val updatedTask = task.copy(name = title, description = description)
-        taskRepository.update(groupID, updatedTask)
-        onBackPressed()
+        viewModelScope.launch {
+            val title = taskTitleMutable.value ?: ""
+            val description = taskDescriptionMutable.value ?: ""
+            val updatedTask = task.copy(name = title, description = description)
+            taskRepository.update(updatedTask)
+            onBackPressed()
+        }
     }
 
-    fun onBackPressed(){
+    private fun onBackPressed(){
         actionStateMutable.value = ActionState.Back
     }
 
     fun deleteTask(){
-        taskRepository.delete(groupID, task.id)
-        onBackPressed()
+        viewModelScope.launch {
+            taskRepository.delete(task.id)
+            onBackPressed()
+        }
     }
 
     //endregion

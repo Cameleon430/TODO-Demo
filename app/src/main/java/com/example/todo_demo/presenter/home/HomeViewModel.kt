@@ -3,10 +3,12 @@ package com.example.todo_demo.presenter.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.todo_demo.di.ServiceLocator
 import com.example.todo_demo.domain.Group
 import com.example.todo_demo.presenter.base.GroupViewState
 import com.example.todo_demo.presenter.base.SingleLiveEvent
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
@@ -25,7 +27,7 @@ class HomeViewModel : ViewModel() {
     //region Actions
 
     fun onUpdateViewState(){
-        invalidateViewItems()
+        viewModelScope.launch {  invalidateViewItems() }
     }
 
     fun onCreateGroupDialog(){
@@ -33,10 +35,12 @@ class HomeViewModel : ViewModel() {
     }
 
     fun onCreateGroup(name: String){
-        val group = Group(name = name)
+        viewModelScope.launch {
+            val group = Group(name = name)
 
-        groupRepository.add(group)
-        invalidateViewItems()
+            groupRepository.add(group)
+            invalidateViewItems()
+        }
     }
 
     fun onGroupDetailView(group: GroupViewState){
@@ -48,7 +52,7 @@ class HomeViewModel : ViewModel() {
         actionStateMutable.value = ActionState.GroupDetailView(viewItem.id)
     }
 
-    private fun invalidateViewItems() {
+    private suspend fun invalidateViewItems() {
         val groups = groupRepository.getAll()
         val viewItems = groups.map{
             it.toViewState()

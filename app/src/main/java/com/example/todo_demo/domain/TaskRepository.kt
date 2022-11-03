@@ -2,14 +2,14 @@ package com.example.todo_demo.domain
 
 interface TaskRepository {
 
-    fun getAll(groupID: Int): List<Task>
+    suspend fun getAllByGroupID(groupID: Int): List<Task>
 
-    fun get(groupID: Int, taskID: Int): Task?
+    suspend fun get(taskID: Int): Task?
 
-    fun add(groupID: Int, task: Task): Int
+    suspend fun add(task: Task): Int
 
-    fun update(groupID: Int, updatedTask: Task)
+    suspend fun update(updatedTask: Task)
 
-    fun delete(groupID: Int, taskID: Int)
+    suspend fun delete(taskID: Int)
 
 }

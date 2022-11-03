@@ -2,14 +2,14 @@ package com.example.todo_demo.domain
 
 interface GroupRepository {
 
-    fun getAll(): List<Group>
+    suspend fun getAll(): List<Group>
 
-    fun get(id: Int): Group?
+    suspend fun get(id: Int): Group?
 
-    fun  add(group: Group)
+    suspend fun  add(group: Group)
 
-    fun update(group: Group)
+    suspend fun update(group: Group)
 
-    fun delete(group: Group)
+    suspend fun delete(group: Group)
 
 }

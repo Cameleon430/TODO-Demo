@@ -69,14 +69,13 @@ class TaskDetailFragment : BaseFragment() {
     }
 
     private fun initializeViews(){
-        val groupID = arguments?.getInt(GROUP_ID) ?: throw IllegalStateException("Missing group id")
         val taskID = arguments?.getInt(TASK_ID) ?: throw IllegalStateException("Missing task id")
 
         viewModel.actionState.observe(viewLifecycleOwner, this::onActionStateChanged)
         viewModel.taskTitle.observe(viewLifecycleOwner, this::onTaskTitleChanged)
         viewModel.taskDescription.observe(viewLifecycleOwner, this::onTaskDescriptionChanged)
 
-        viewModel.onUpdateViewState(groupID, taskID)
+        viewModel.onUpdateViewState(taskID)
     }
 
     //endregion
@@ -129,13 +128,11 @@ class TaskDetailFragment : BaseFragment() {
 
     companion object{
         private const val TASK_ID = "TASK_ID"
-        private const val GROUP_ID = "GROUP_ID"
 
-        fun newInstance(groupID: Int, taskID: Int): TaskDetailFragment {
+        fun newInstance(taskID: Int): TaskDetailFragment {
             return TaskDetailFragment().apply{
                 arguments = bundleOf(
-                    TASK_ID to taskID,
-                    GROUP_ID to groupID
+                    TASK_ID to taskID
                 )
             }
         }
